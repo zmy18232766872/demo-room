@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=0, minimum-scale=0.5, maximum-scale=0.5">
+    <title>canvas-dots-lines</title>
+</head>
+<body>
+
+<style>
+  #canvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000;
+  }
+</style>
+
+<div class="bg">
+  <canvas id="canvas" width="1000" height="600">
+    您的浏览器不支持canvas!
+  </canvas>
+</div>
+<script type="text/javascript">
+  var Dots = function () {
+  // 画布相关
+  this.canvas;
+  this.ctx;
+
+  // 画点相关，x,y为横纵坐标，r为原点半径
+  this.x;
+  this.y;
+  this.r;
+
+  this.sx = Math.random() * 0.4;
+};
+
+Dots.prototype = {
+  // 初始化点的方法
+  init: function (canvas) {
+    this.canvas = canvas;
+    this.ctx = this.canvas.getContext('2d');
+
+    this.x = Math.random() * this.canvas.width;
+    this.y = Math.random() * this.canvas.height;
+    this.r = Math.random() * 1.2; // 随机生成 <4 的半径值
+
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+    this.ctx.fillStyle = "rgba(255,255,255,0.6)";
+    this.ctx.fill();
+    this.ctx.closePath();
+  },
+  // 更新点位置
+  update: function () {
+    this.x = this.x + this.sx;
+
+    // 点超出canvas范围时另其"重生"
+    if (this.x < 0 || this.x > this.canvas.width) {
+      this.init(this.canvas);
+    }
+
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+    this.ctx.fillStyle = "rgba(255,255,255,.6)";
+    this.ctx.fill();
+    this.ctx.closePath();
+  }
+};
+
+let dotsArr = [],
+      dotsNum = 200,
+      dotsDistance = 120, // 点之间产生连线的最大距离
+
+      canvas = document.getElementById('canvas'),
+      ctx = canvas.getContext('2d');
+
+  // 生成点
+  for (let i = 0; i < dotsNum; i ++) {
+    let dot = new Dots();
+    dotsArr.push(dot);
+    dot.init(canvas);
+  }
+
+  // 动画与连线
+  let requestAnimFrame = requestAnimationFrame || webkitRequestAnimationFrame || oRequestAnimationFrame || msRequestAnimationFrame;
+  requestAnimFrame(animateUpdate); // 兼容不同浏览器的requestAnimationFrame
+
+  function animateUpdate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空canvas中原有的内容
+
+    for (let i = 0; i < dotsNum; i ++) {
+      dotsArr[i].update();
+    }
+    // 继续渲染
+    requestAnimFrame(animateUpdate);
+  }
+</script>
+
+</body>
+</html>

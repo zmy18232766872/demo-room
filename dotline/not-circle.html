@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=0, minimum-scale=0.5, maximum-scale=0.5">
+    <title>canvas-dots-lines</title>
+</head>
+<body>
+
+<style>
+  #bg{
+    background: url(starsky.jpg) no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
+
+  #canvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 700px;
+    height: 500px;
+  }
+</style>
+
+<div>
+  <canvas id="canvas"></canvas>
+</div>
+<script type="text/javascript">
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+  ctx.beginPath();
+  ctx.arc(70, 80, 30, 0, Math.PI * 2, false);
+
+  // 实心圆 - 填充颜色,默认是黑色
+  ctx.fillStyle = 'red';
+  // 实心圆 - 画实心圆
+  ctx.fill();
+
+  // 空心圆 - 边框颜色,默认是黑色
+  ctx.strokeStyle = 'black';
+  // 空心圆 - 画空心圆
+  ctx.stroke();
+  ctx.closePath();
+</script>
+
+</body>
+</html>
